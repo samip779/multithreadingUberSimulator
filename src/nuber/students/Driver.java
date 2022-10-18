@@ -2,7 +2,15 @@ package nuber.students;
 
 public class Driver extends Person {
 
+	private Passenger passenger;
+
 	public Driver(String driverName, int maxSleep) {
+		super(driverName, maxSleep);
+
+	}
+
+	public int getTravelTime() {
+		return (int) (Math.random() * maxSleep);
 	}
 
 	/**
@@ -12,7 +20,10 @@ public class Driver extends Person {
 	 * @param newPassenger Passenger to collect
 	 * @throws InterruptedException
 	 */
-	public void pickUpPassenger(Passenger newPassenger) {
+	public void pickUpPassenger(Passenger newPassenger) throws InterruptedException {
+		passenger = newPassenger;
+		int timeToGetToPassenger = getTravelTime();
+		Thread.sleep(timeToGetToPassenger);
 	}
 
 	/**
@@ -21,7 +32,9 @@ public class Driver extends Person {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void driveToDestination() {
+	public void driveToDestination() throws InterruptedException {
+		int travelTimeForPassenger = passenger.getTravelTime();
+		Thread.sleep(travelTimeForPassenger);
 	}
 
 }
