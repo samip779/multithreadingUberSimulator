@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 public class Simulation {
 
 	/**
-	 * 
+	 *
 	 * @param regions       The region names and maximum simultaneous active
 	 *                      bookings allowed in that region
 	 * @param maxDrivers    The number of drivers to create
@@ -42,9 +42,11 @@ public class Simulation {
 		NuberDispatch dispatch = new NuberDispatch(regions, logEvents);
 
 		// create drivers that are available for jobs
+
 		for (int i = 0; i < maxDrivers; i++) {
 			Driver d = new Driver("D-" + Person.getRandomName(), maxSleep);
 			dispatch.addDriver(d);
+
 		}
 
 		// create passengers
@@ -84,7 +86,9 @@ public class Simulation {
 				Future<BookingResult> f = i.next();
 
 				if (f.isDone()) {
+
 					i.remove();
+
 				}
 			}
 

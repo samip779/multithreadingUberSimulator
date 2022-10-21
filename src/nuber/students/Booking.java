@@ -1,10 +1,13 @@
 package nuber.students;
 
+import java.util.Date;
+import java.util.concurrent.Callable;
+
 /**
- * 
+ *
  * Booking represents the overall "job" for a passenger getting to their
  * destination.
- * 
+ *
  * It begins with a passenger, and when the booking is commenced by the region
  * responsible for it, an available driver is allocated from dispatch. If no
  * driver is
@@ -12,21 +15,29 @@ package nuber.students;
  * the destination,
  * a BookingResult object is provided with the overall information for the
  * booking.
- * 
+ *
  * The Booking must track how long it takes, from the instant it is created, to
  * when the
  * passenger arrives at their destination. This should be done using Date class'
  * getTime().
- * 
+ *
  * Booking's should have a globally unique, sequential ID, allocated on their
  * creation.
  * This should be multi-thread friendly, allowing bookings to be created from
  * different threads.
- * 
+ *
  * @author james
  *
  */
-public class Booking {
+public class Booking implements Callable<BookingResult> {
+
+	private NuberDispatch dispatch;
+	private Passenger passenger;
+	private String passengerName;
+	private long startedTime;
+	private int id;
+	private String driverName;
+	// private String passengerName;
 
 	/**
 	 * Creates a new booking for a given Nuber dispatch and passenger, noting that
@@ -34,11 +45,18 @@ public class Booking {
 	 * driver is provided as it will depend on whether one is available when the
 	 * region
 	 * can begin processing this booking.
-	 * 
+	 *
 	 * @param dispatch
 	 * @param passenger
 	 */
 	public Booking(NuberDispatch dispatch, Passenger passenger) {
+		startedTime = new Date().getTime();
+		id = dispatch.getBookingId();
+		dispatch.logEvent(this, "Creating Booking");
+		this.dispatch = dispatch;
+		this.passenger = passenger;
+		passengerName = passenger.name;
+
 	}
 
 	/**
@@ -64,8 +82,27 @@ public class Booking {
 	 *
 	 * @return A BookingResult containing the final information about the booking
 	 */
-	public BookingResult call() {
+	@Override
+	public BookingResult call() throws InterruptedException {
 
+		dispatch.logEvent(this, "Starting Booking, Getting Driver");
+		Driver driver = dispatch.getDriver();
+		this.driverName = driver.name;
+		dispatch.logEvent(this, "Starting, On the way to passenger");
+
+		driver.pickUpPassenger(this.passenger);
+		dispatch.logEvent(this, "Collected Passenger, On way to destination");
+
+		driver.driveToDestination();
+
+		long tripDuration = new Date().getTime() - startedTime;
+		dispatch.addDriver(driver);
+		dispatch.logEvent(this, "At destination, Driver is now free");
+
+		BookingResult bookingResult = new BookingResult(id, passenger, driver,
+				tripDuration);
+
+		return bookingResult;
 	}
 
 	/***
@@ -77,12 +114,15 @@ public class Booking {
 	 * - followed by a colon,
 	 * - followed by the passenger's name (if the passenger is null, it should show
 	 * the word "null")
-	 * 
+	 *
 	 * @return The compiled string
 	 */
 	@Override
 	public String toString() {
+		return id + ":" + driverName + ":" + passengerName;
 
+		// return String.format("%d:%s:%s", bookingResult.jobID,
+		// bookingResult.driver.name, bookingResult.passenger.name);
 	}
 
 }
