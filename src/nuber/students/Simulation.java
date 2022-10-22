@@ -25,6 +25,24 @@ public class Simulation {
 	public Simulation(HashMap<String, Integer> regions, int maxDrivers, int maxPassengers, int maxSleep,
 			boolean logEvents) throws Exception {
 
+		// Terminate this simulation if there are not any regions proided
+		if (regions.size() == 0) {
+			exitSimulationMessage("At least one region should be provided");
+			return;
+		}
+
+		// Terminate this simulation if there are none drivers
+		if (maxDrivers <= 0) {
+			exitSimulationMessage("Number of drivers must be greater than zero");
+			return;
+		}
+
+		// Terminate this simulation if there are none passengers
+		if (maxPassengers <= 0) {
+			exitSimulationMessage("Number of passengers must be greater than zero");
+			return;
+		}
+
 		// store the current time
 		long start = new Date().getTime();
 
@@ -87,6 +105,13 @@ public class Simulation {
 
 				if (f.isDone()) {
 
+					// BookingResult result = f.get();
+					// String s = result.jobID + ":" + result.passenger.name + ":" +
+					// result.driver.name + ":"
+					// + result.tripDuration;
+					// System.out.println(s);
+					// Thread.sleep(3000);
+
 					i.remove();
 
 				}
@@ -107,5 +132,17 @@ public class Simulation {
 		// print out the final information for the simulation run
 		long totalTime = new Date().getTime() - start;
 		System.out.println("Simulation complete in " + totalTime + "ms");
+	}
+
+	/**
+	 * This method is called when the program needs to be terminated. For example If
+	 * there are Zero number of drivers or passengers
+	 * provided in the simulation
+	 * 
+	 * @param message describing the cause of termination
+	 */
+	private void exitSimulationMessage(String message) {
+		System.out.println("Simulation Terminated: " + message);
+
 	}
 }

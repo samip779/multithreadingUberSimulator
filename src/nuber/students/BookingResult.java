@@ -14,6 +14,4 @@ public class BookingResult {
 		this.tripDuration = tripDuration;
 	}
 
-	
-
 }

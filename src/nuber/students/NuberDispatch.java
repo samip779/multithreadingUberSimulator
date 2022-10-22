@@ -24,11 +24,13 @@ public class NuberDispatch {
 
 	private boolean isShutdown = false;
 
-	private int bookingId = 0; 
+	private int bookingId = 0;
 	private int driversAwaiting = 0;
 
-	// public ConcurrentMap<Integer, Integer> nextBookingId = new ConcurrentHashMap<Integer, Integer>();
-	// private ConcurrentMap<Integer, Integer> driversAwaiting = new ConcurrentHashMap<Integer, Integer>();
+	// public ConcurrentMap<Integer, Integer> nextBookingId = new
+	// ConcurrentHashMap<Integer, Integer>();
+	// private ConcurrentMap<Integer, Integer> driversAwaiting = new
+	// ConcurrentHashMap<Integer, Integer>();
 
 	/**
 	 * Stores all the idealDrivers in an bloking Queue.
@@ -56,7 +58,7 @@ public class NuberDispatch {
 	public NuberDispatch(HashMap<String, Integer> regionInfo, boolean logEvents) {
 		System.out.println("Creating Nuber Dispatch");
 		this.logEvents = logEvents;
-		System.out.println("Creating "+  regionInfo.size()  +" regions");
+		System.out.println("Creating " + regionInfo.size() + " regions");
 		regionInfo.forEach(
 				(key, value) -> {
 					System.out.println("Creating " + key + " region");
@@ -108,7 +110,7 @@ public class NuberDispatch {
 	 * @param booking The booking that's responsible for the event occurring
 	 * @param message The message to show
 	 */
-	public void logEvent(Booking booking, String message) {
+	public synchronized void logEvent(Booking booking, String message) {
 
 		if (!logEvents)
 			return;
@@ -155,8 +157,13 @@ public class NuberDispatch {
 		return driversAwaiting;
 	}
 
-
-	public synchronized int getBookingId () {
+	/**
+	 * This function provides the unique sequential booking id for every booking
+	 * It is called when a booking is created.
+	 * It returns current valye of bookingId variable and increments it for the next
+	 * booking object.
+	 */
+	public synchronized int getBookingId() {
 		return ++bookingId;
 	}
 

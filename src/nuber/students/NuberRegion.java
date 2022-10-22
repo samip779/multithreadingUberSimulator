@@ -62,10 +62,9 @@ public class NuberRegion {
 	 *         completed booking
 	 */
 
-
 	public Future<BookingResult> bookPassenger(Passenger waitingPassenger) {
 		if (isShutdown) {
-			System.out.println("Booking rejected for passenger" + waitingPassenger.name);
+			System.out.println("Booking rejected for passenger " + waitingPassenger.name);
 			return null;
 		}
 		Booking booking = new Booking(dispatch, waitingPassenger);

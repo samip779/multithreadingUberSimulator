@@ -35,7 +35,7 @@ public class Driver extends Person {
 	public void driveToDestination() throws InterruptedException {
 		int travelTimeForPassenger = passenger.getTravelTime();
 		Thread.sleep(travelTimeForPassenger);
-	
+
 	}
 
 }
