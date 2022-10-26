@@ -24,13 +24,13 @@ public class NuberDispatch {
 
 	private boolean isShutdown = false;
 
-	private int bookingId = 0;
-	private int driversAwaiting = 0;
+	// It stores the total number of drivers proided in the simulation constructor
+	// and later is used by region objects 
+	public int totalNumberofDrivers;
 
-	// public ConcurrentMap<Integer, Integer> nextBookingId = new
-	// ConcurrentHashMap<Integer, Integer>();
-	// private ConcurrentMap<Integer, Integer> driversAwaiting = new
-	// ConcurrentHashMap<Integer, Integer>();
+	private int bookingId = 0;
+
+	private int driversAwaiting = 0;
 
 	/**
 	 * Stores all the idealDrivers in an bloking Queue.
@@ -55,9 +55,10 @@ public class NuberDispatch {
 	 *                   can handle
 	 * @param logEvents  Whether logEvent should print out events passed to it
 	 */
-	public NuberDispatch(HashMap<String, Integer> regionInfo, boolean logEvents) {
+	public NuberDispatch(HashMap<String, Integer> regionInfo, boolean logEvents, int maxDrivers) {
 		System.out.println("Creating Nuber Dispatch");
 		this.logEvents = logEvents;
+		this.totalNumberofDrivers = maxDrivers;
 		System.out.println("Creating " + regionInfo.size() + " regions");
 		regionInfo.forEach(
 				(key, value) -> {
@@ -96,7 +97,7 @@ public class NuberDispatch {
 	 */
 	public Driver getDriver() throws NoSuchElementException, InterruptedException {
 		Driver removedDriverFromQueue = idealDrivers.take();
-		driversAwaiting--;
+		decrementDriversAwaiting();
 		return removedDriverFromQueue;
 
 	}
@@ -110,7 +111,7 @@ public class NuberDispatch {
 	 * @param booking The booking that's responsible for the event occurring
 	 * @param message The message to show
 	 */
-	public synchronized void logEvent(Booking booking, String message) {
+	public void logEvent(Booking booking, String message) {
 
 		if (!logEvents)
 			return;
@@ -160,11 +161,15 @@ public class NuberDispatch {
 	/**
 	 * This function provides the unique sequential booking id for every booking
 	 * It is called when a booking is created.
-	 * It returns current valye of bookingId variable and increments it for the next
+	 * It returns current value of bookingId variable and increments it for the next
 	 * booking object.
 	 */
 	public synchronized int getBookingId() {
 		return ++bookingId;
+	}
+
+	private synchronized void decrementDriversAwaiting() {
+		driversAwaiting--;
 	}
 
 	/**

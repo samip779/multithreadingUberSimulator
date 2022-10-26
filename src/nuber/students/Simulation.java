@@ -43,6 +43,8 @@ public class Simulation {
 			return;
 		}
 
+		// 
+
 		// store the current time
 		long start = new Date().getTime();
 
@@ -57,7 +59,8 @@ public class Simulation {
 		String[] regionNames = regions.keySet().toArray(new String[0]);
 
 		// create a new dispatch object
-		NuberDispatch dispatch = new NuberDispatch(regions, logEvents);
+		NuberDispatch dispatch = new NuberDispatch(regions, logEvents, maxDrivers);
+
 
 		// create drivers that are available for jobs
 
@@ -106,11 +109,12 @@ public class Simulation {
 				if (f.isDone()) {
 
 					// BookingResult result = f.get();
-					// String s = result.jobID + ":" + result.passenger.name + ":" +
-					// result.driver.name + ":"
-					// + result.tripDuration;
-					// System.out.println(s);
-					// Thread.sleep(3000);
+
+					// System.out.println("\n \n JOb Completed");
+					// System.out.println("JOb ID: " + result.jobID);
+					// System.out.println("Passenger Name: " + result.passenger.name);
+					// System.out.println("Driver Name: " + result.driver.name);
+					// System.out.println("Trip Duration: " + result.tripDuration);
 
 					i.remove();
 

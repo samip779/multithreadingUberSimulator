@@ -42,7 +42,18 @@ public class NuberRegion {
 	public NuberRegion(NuberDispatch dispatch, String regionName, int maxSimultaneousJobs) {
 
 		this.dispatch = dispatch;
-		this.maxSimultaneousJobs = maxSimultaneousJobs;
+
+		// If total number of drivers in the ideal queue is less than the max
+		// simultaneous job counts of
+		// the region, then there is no point in creating threads equal to
+		// maxSimultaneousJobs
+		// which results in many useless threads.
+		if (dispatch.totalNumberofDrivers < maxSimultaneousJobs) {
+			this.maxSimultaneousJobs = this.dispatch.totalNumberofDrivers;
+		} else {
+
+			this.maxSimultaneousJobs = maxSimultaneousJobs;
+		}
 
 		executor = Executors.newFixedThreadPool(this.maxSimultaneousJobs);
 	}
