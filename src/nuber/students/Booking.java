@@ -37,7 +37,6 @@ public class Booking implements Callable<BookingResult> {
 	private long startedTime;
 	private int id;
 	private String driverName;
-	// private String passengerName;
 
 	/**
 	 * Creates a new booking for a given Nuber dispatch and passenger, noting that

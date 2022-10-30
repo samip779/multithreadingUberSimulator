@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Future;
 
 public class Simulation {
@@ -25,8 +24,8 @@ public class Simulation {
 	public Simulation(HashMap<String, Integer> regions, int maxDrivers, int maxPassengers, int maxSleep,
 			boolean logEvents) throws Exception {
 
-		// Terminate this simulation if there are not any regions proided
-		if (regions.size() == 0) {
+		// Terminate this simulation if there are not any regions provided
+		if (regions.size() <= 0) {
 			exitSimulationMessage("At least one region should be provided");
 			return;
 		}
@@ -43,7 +42,7 @@ public class Simulation {
 			return;
 		}
 
-		// 
+		//
 
 		// store the current time
 		long start = new Date().getTime();
@@ -60,7 +59,6 @@ public class Simulation {
 
 		// create a new dispatch object
 		NuberDispatch dispatch = new NuberDispatch(regions, logEvents, maxDrivers);
-
 
 		// create drivers that are available for jobs
 

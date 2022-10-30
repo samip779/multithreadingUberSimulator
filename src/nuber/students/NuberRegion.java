@@ -90,6 +90,9 @@ public class NuberRegion {
 	 */
 	public void shutdown() {
 		this.isShutdown = true;
+
+		// This shutdown method stops accepting new bookings and terminates after the
+		// completion of previously submitted bookings.
 		executor.shutdown();
 	}
 
